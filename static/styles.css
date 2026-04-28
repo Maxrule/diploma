@@ -3,6 +3,20 @@
   box-sizing: border-box;
 }
 
+:root {
+  --glass-bg: rgba(248, 251, 253, 0.78);
+  --glass-border: rgba(210, 220, 230, 0.92);
+  --glass-shadow: 0 14px 34px rgba(84, 101, 122, 0.12);
+  --chip-bg: #f5f8fb;
+  --chip-border: #e1e8ef;
+  --chip-hover: #edf4f8;
+  --chip-active-bg: #dde6f0;
+  --chip-active-text: #4f6278;
+  --accent-steel: #6f8298;
+  --accent-steel-soft: #a9b8c8;
+  --chip-text: #475569;
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
@@ -25,16 +39,18 @@ h2 {
 .nav-item {
   color: #3e444a;
   text-decoration: none;
-  font-weight: 500;
-  padding: 8px 16px;
+  font-weight: 600;
+  padding: 10px 14px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  border-radius: 999px;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .nav-item:hover {
-  background-color: transparent;
-  color: #7f868e;
+  background-color: rgba(255, 255, 255, 0.72);
+  color: #2f3a44;
 }
 
 .nav-item-right-start {
@@ -75,11 +91,16 @@ h2 {
 
 .navbar {
     display: flex;
-    height: 60px;
+    height: 72px;
     align-items: center;
     justify-content: space-between; /* Рівномірно розподіляє 3 частини */
-    padding: 0 50px; /* Відступ 50px від обох країв */
+    padding: 0 32px;
     width: 100%;
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
 /* Логотип (ліва частина) */
@@ -92,7 +113,7 @@ h2 {
     margin-right: 14px;
 }
 .navbar-logo img {
-  height: 80px;
+  height: 72px;
   width: auto;
   display: block;
 }
@@ -108,11 +129,15 @@ h2 {
 .navbar-search-input {
   width: 220px;
   max-width: 100%;
-  height: 40px;
+  height: 44px;
   margin: 0;
   margin-bottom: 0;
-  padding: 10px 12px;
-  transition: width 260ms ease;
+  padding: 10px 16px;
+  border: 1px solid #d6e0e8;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transition: width 260ms ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 /* Don't expand navbar search input on focus anymore; keep stable width */
@@ -152,7 +177,8 @@ h2 {
 .navbar-search-input:focus,
 .navbar-search-input:focus-visible {
   outline: none;
-  box-shadow: none;
+  border-color: var(--accent-steel-soft);
+  box-shadow: 0 0 0 4px rgba(111, 130, 152, 0.14);
 }
 
 
@@ -459,10 +485,13 @@ h2 {
   width: 80%;
 }
 .filter-block {
-  background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 .vip-block {
   background: #fff;
@@ -588,8 +617,8 @@ h2 {
 .filter-title, .vip-title {
   font-size: 16px;
   margin: 5px 0px;
-  font-weight: 700;
-  color: #222;
+  font-weight: 800;
+  color: #1f2937;
 }
 
 .chips {
@@ -599,23 +628,36 @@ h2 {
   padding-right: 4px; /* leave room for scrollbar */
   box-sizing: border-box;
   margin-bottom: 20px;
+  border: 1px solid var(--chip-border);
+  border-radius: 14px;
+  background: rgba(247, 250, 252, 0.8);
 }
 .chip {
   display: block;
   width: 100%;
-  padding: 10px 12px;
-  background: #f3f6f8;
+  padding: 12px 14px;
+  background: transparent;
   border-radius: 0; /* no rounding */
   border: none;
-  border-bottom: 1px solid #e6eaed; /* subtle separator, no gap */
+  border-bottom: 1px solid var(--chip-border); /* subtle separator, no gap */
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
+  color: var(--chip-text);
   margin-bottom: 0; /* no vertical gaps between chips */
   text-align: left;
   box-sizing: border-box;
+  transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
 }
-.chip:hover { background: #e9eef2; }
-.chip.active { background: #dbe4eb; }
+.chip:hover {
+  background: var(--chip-hover);
+  color: #334155;
+  padding-left: 18px;
+}
+.chip.active {
+  background: var(--chip-active-bg);
+  color: var(--chip-active-text);
+}
 
 /* Category chip icons */
 .category-chip {
@@ -628,6 +670,7 @@ h2 {
   width: 18px;
   height: 18px;
   object-fit: contain;
+  opacity: 0.92;
 }
 
 /* City chips: left empty rounded marker and filled inner square when active */
@@ -641,18 +684,20 @@ h2 {
   flex: 0 0 18px;
   width: 18px;
   height: 18px;
-  border: 2px solid #cfd6db;
-  border-radius: 4px;
+  border: 2px solid #c8d5de;
+  border-radius: 6px;
   background: transparent;
   box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 .city-chip .city-marker::after {
   content: none;
 }
 /* Active state: fill marker with color and show centered check */
 .city-chip.active .city-marker {
-  background: #cfd6db;
-  border-color: #cfd6db;
+  background: var(--accent-steel);
+  border-color: var(--accent-steel);
+  transform: scale(1.03);
 }
 .city-chip.active .city-marker::after {
   content: '\2713'; /* check mark */
@@ -660,7 +705,7 @@ h2 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: #1f2b33; /* check color for contrast */
+  color: #ffffff; /* check color for contrast */
   font-size: 12px;
   line-height: 1;
   font-weight: 700;
@@ -673,7 +718,7 @@ h2 {
 }
 .chips::-webkit-scrollbar, .city-filter::-webkit-scrollbar { width: 4px; height: 4px; }
 .chips::-webkit-scrollbar-track, .city-filter::-webkit-scrollbar-track { background: #f3f6f8; }
-.chips::-webkit-scrollbar-thumb, .city-filter::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 6px; background: #a0adbe; }
+.chips::-webkit-scrollbar-thumb, .city-filter::-webkit-scrollbar-thumb { background: rgba(134, 154, 173, 0.9); border-radius: 6px; }
 
 .price-current-text {
   margin-top: 8px;
@@ -2002,17 +2047,17 @@ input[type="file"] {
 
 /* Кнопка перемикання теми у стилі "Обране" */
 .theme-toggle {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    width: auto;
-    height: auto;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: none;
+    box-shadow: 0 8px 20px rgba(84, 101, 122, 0.12);
     transition: all 0.3s ease;
     outline: none;
     color: #f1c40f;
@@ -2020,8 +2065,8 @@ input[type="file"] {
 
 /* Ефект при наведенні */
 .theme-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: none;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(84, 101, 122, 0.16);
 }
 
 /* Адаптація кнопки під ТЕМНУ тему */
@@ -2029,6 +2074,7 @@ body.dark-mode .theme-toggle {
     background: transparent;
     box-shadow: none;
     color: #f39c12;
+    border-color: transparent;
 }
 
 /* Стиль самих SVG всередині кола */
@@ -2055,17 +2101,17 @@ body.dark-mode .theme-toggle {
 
 /* Базовий стиль для обох круглих кнопок */
 .lang-toggle, .theme-toggle {
-    background: transparent;
-    border: none;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
     width: auto;
-    height: auto;
-    padding: 0;
+    height: 44px;
+    padding: 0 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: none;
+    box-shadow: 0 8px 20px rgba(84, 101, 122, 0.12);
     transition: all 0.3s ease;
     outline: none;
     position: relative;
@@ -2074,22 +2120,19 @@ body.dark-mode .theme-toggle {
 }
 
 .lang-toggle {
-    color: #ffffff;
+    color: #3e444a;
     gap: 8px;
-    padding: 0;
-    background: transparent;
-    border-radius: 0;
+    padding: 0 14px;
 }
 
 /* Ефекти наведення */
 .lang-toggle:hover, .theme-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: none;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(84, 101, 122, 0.16);
 }
 
 .lang-toggle:hover {
-    transform: none;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.88);
 }
 
 /* Темна тема для обох кнопок */
@@ -2097,6 +2140,7 @@ body.dark-mode .lang-toggle,
 body.dark-mode .theme-toggle {
     background: transparent;
     box-shadow: none;
+    border-color: transparent;
 }
 
 .lang-text {
@@ -2110,17 +2154,18 @@ body.dark-mode .theme-toggle {
 body.dark-mode .lang-toggle {
     background: transparent;
     color: #fff;
+    border-color: transparent;
 }
 
 .lang-option {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   color: #3e444a;
 }
 
 .lang-option.active {
-  color: #7f868e;
+  color: var(--accent-steel);
 }
 
 .lang-separator {
@@ -2243,10 +2288,20 @@ body.dark-mode .navbar {
   border-bottom-color: #4a4a4a;
 }
 
+body.dark-mode .filter-block,
+body.dark-mode .chips,
+body.dark-mode .chip,
+body.dark-mode .navbar-search-input,
+body.dark-mode .lang-toggle,
+body.dark-mode .theme-toggle,
+body.dark-mode .navbar {
+  border-color: transparent;
+}
+
 body.dark-mode .lang-option.active, 
 body.dark-mode .nav-item:hover {
   background-color: transparent;
-  color: #b0b0b0;
+  color: #93a4b8;
 }
 
 body.dark-mode .chip,
@@ -2354,6 +2409,16 @@ body.dark-mode .chat-message.buyer {
 body.dark-mode .chip.category-chip.chip.active,
 body.dark-mode .chat-message.seller {
   background-color: #3c3c3c;
+}
+
+body.dark-mode .chip.active {
+  background-color: #4d5d72;
+  color: #e7edf5;
+}
+
+body.dark-mode .city-chip.active .city-marker {
+  background: #7f90a4;
+  border-color: #7f90a4;
 }
 body.dark-mode .chips,
 body.dark-mode .chip,
@@ -2710,11 +2775,11 @@ body.dark-mode .listing-card.blocked .blocked-overlay {
   left: 0;
   right: 0;
   z-index: 1300;
-  background-color: #f0f2f5;
+  background: var(--glass-bg);
 }
 
 .home-page .top-page-section {
-  padding-top: 70px;
+  padding-top: 82px;
 }
 
 /* Global footer */
