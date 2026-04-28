@@ -1,0 +1,2853 @@
+/* Обнуление */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #e4e8ec;
+  color: #333;
+}
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.3em;
+  margin-block-end: 0.3em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: #333;
+}
+
+.nav-item {
+  color: #3e444a;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-item:hover {
+  background-color: transparent;
+  color: #7f868e;
+}
+
+.nav-item-right-start {
+  margin-left: auto;
+}
+
+.nav-item-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.selected-category,
+.selected-city {
+  margin-left: 10px;
+  font-size: 0.8em;
+  color: #333;
+}
+
+/* Меню (центральна частина) */
+.navbar-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: none;
+    margin-right: 24px;
+}
+
+.navbar-secondary .navbar-container {
+    margin-left: auto;
+    margin-right: 24px;
+    justify-content: flex-end;
+}
+
+.navbar-secondary .nav-item-right-start {
+    margin-left: 0;
+}
+
+
+.navbar {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    justify-content: space-between; /* Рівномірно розподіляє 3 частини */
+    padding: 0 50px; /* Відступ 50px від обох країв */
+    width: 100%;
+}
+
+/* Логотип (ліва частина) */
+.navbar-logo {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 10;
+    margin-right: 14px;
+}
+.navbar-logo img {
+  height: 80px;
+  width: auto;
+  display: block;
+}
+
+.navbar-search {
+  flex: 2.4;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  min-width: 340px;
+}
+
+.navbar-search-input {
+  width: 220px;
+  max-width: 100%;
+  height: 40px;
+  margin: 0;
+  margin-bottom: 0;
+  padding: 10px 12px;
+  transition: width 260ms ease;
+}
+
+/* Don't expand navbar search input on focus anymore; keep stable width */
+.navbar-search-input {
+  /* width is controlled above (220px) and should not be expanded on focus */
+}
+
+/* navbar container hides/shows with a fade+translate animation */
+.navbar-container {
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+.navbar-container.nav-hidden {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+/* When search is focused we animate disappearance of filters and VIP block
+   (use `search-focused` class on the <body>) */
+.search-focused .side-panels {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 220ms ease, transform 220ms ease, height 220ms ease;
+  pointer-events: none;
+  height: 0; /* collapse visual space */
+  overflow: hidden;
+}
+
+.search-focused .filters-column,
+.search-focused .vip-column {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  pointer-events: none;
+}
+
+.navbar-search-input:focus,
+.navbar-search-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+
+#scrollTopBtn {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 40px;
+  height: 40px;
+  background-color: #718195;
+  color: #f0f2f5;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 1000;
+}
+
+#scrollTopBtn.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#scrollTopBtn:hover {
+  transform: translateY(0) scale(1.2);
+}
+
+
+.main-container {
+  max-width: 1300px;
+  margin: 20px auto;
+  padding: 1rem;
+}
+
+.top-page-section {
+  background-color: #f0f2f5;
+}
+
+.top-main {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 20px;
+}
+
+.page-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.listing-page {
+  margin-top: 24px;
+}
+
+.listing-row {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+
+.listing-photo-block {
+  width: 95%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.listing-page-photo {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.08s linear;
+  transform-origin: 50% 50%;
+  position: relative;
+  z-index: 1; /* keep photo below navigation arrows */
+}
+
+.listing-photo-viewport {
+  margin: 5px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.listing-photo-frame.zoom-active .listing-page-photo {
+  transform: scale(1.5);
+}
+
+.listing-photo-frame {
+  position: relative;
+}
+
+.listing-photo-thumbs {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 3;
+}
+
+.listing-photo-thumb-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid #c8c8c8;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 0;
+  cursor: pointer;
+}
+
+.listing-photo-thumb-btn.active {
+  border: 2px solid #000;
+}
+
+.listing-photo-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #39424e;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10; /* ensure arrows stay above scaled image */
+}
+
+.listing-photo-arrow-left {
+  left: 8px;
+}
+
+.listing-photo-arrow-right {
+  right: 8px;
+}
+
+.listing-photo-frame:hover .listing-photo-arrow {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.listing-info-block {
+  width: 35%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* Anchor action buttons inside info block to the bottom */
+.listing-info-block {
+  position: relative;
+  padding-bottom: 84px; /* reserve space for two stacked buttons */
+}
+.listing-info-actions {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.listing-info-actions .btn {
+  width: 100%;
+  padding: 10px 12px;
+}
+
+.listing-page-title {
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+/* Clamp page listing title to max 5 lines with ellipsis */
+#listing-title.listing-page-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25em;
+  max-height: calc(1.25em * 5);
+}
+
+/* Layout category and city on a single row: left/right */
+.meta-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+.listing-meta-left { text-align: left; color: #55606a; }
+.listing-meta-right { text-align: right; color: #55606a; }
+
+/* Full title in description block (show full name, not clamped) */
+.listing-full-title {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 8px 0;
+}
+
+.details-subtitle { margin-top: 12px; font-size: 1.4rem; font-weight: 700; }
+
+/* price styling */
+.listing-price { font-weight: 700; color: #111827; }
+
+#listing-price, .uah {
+  font-weight: 700;
+  color: #111827;
+}
+
+.listing-description-block {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.listing-description-block h2 {
+  margin-top: 0;
+}
+
+.listing-actions {
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0px 0px 0px 10px;
+}
+
+@media (max-width: 920px) {
+  .listing-row {
+    flex-direction: column;
+  }
+  .listing-photo-block,
+  .listing-info-block {
+    width: 100%;
+  }
+}
+
+.search-bar {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.create-photo-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.create-photo-thumb {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.filters-panel {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+/* New side panels layout: filters (30%) and VIP (70%) */
+.side-panels {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+.filters-column {
+  width: 20%;
+}
+.vip-column {
+  width: 80%;
+}
+.filter-block {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.vip-block {
+  background: #fff;
+  padding: 12px 12px 5px 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  min-height: 220px;
+  position: relative;
+}
+.vip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.vip-header .vip-title {
+  margin: 0;
+  white-space: nowrap;
+}
+.vip-dots-track {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 22px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef2f5;
+}
+.vip-dot {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: 50%;
+  background: #9aa5b1;
+  padding: 0;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.vip-dot.active {
+  width: 18px;
+  border-radius: 999px;
+  background: #4b5563;
+}
+.vip-dot:hover {
+  background: #6b7280;
+}
+.vip-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  will-change: transform, opacity;
+}
+.vip-overlay-arrow {
+  z-index: 12;
+}
+.vip-block:not(:hover) .vip-overlay-arrow {
+  opacity: 0;
+  pointer-events: none;
+}
+.vip-block:hover .vip-overlay-arrow {
+  opacity: 1;
+  pointer-events: auto;
+}
+.vip-overlay-arrow:disabled {
+  opacity: .35 !important;
+  pointer-events: none !important;
+}
+@media (max-width: 1200px) {
+  .vip-list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 920px) {
+  .side-panels { flex-direction: column; }
+  .filters-column,
+  .vip-column { width: 100%; }
+  .vip-list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .vip-list { grid-template-columns: 1fr; }
+  .vip-dots-track { gap: 6px; padding: 4px 8px; }
+  .vip-dot { width: 7px; height: 7px; }
+  .vip-dot.active { width: 14px; }
+  .vip-overlay-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}
+/* VIP cards look like listing cards but slightly narrower */
+.vip-listing-card { background-color: #fff; border-radius: 12px; padding: 0; margin-top: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #ddd; overflow: hidden; cursor: pointer; }
+.vip-listing-card .listing-image { object-fit: cover; }
+.vip-listing-card h3 { font-size: 16px; padding: 8px 12px; margin-top: 8px; }
+.vip-listing-card p { padding: 0 12px 8px 12px; font-size: 13px; color: #555; }
+.vip-listing-card .vip-card-footer { display:flex; justify-content:space-between; align-items:center; padding: 8px 12px 12px 12px; }
+.vip-listing-card .vip-price { font-weight:700; color:#222; }
+/* category + city row */
+.vip-cat-row { display:flex; justify-content:space-between; align-items:center; padding: 0 12px 6px 12px; border-top: none; }
+.vip-category { color: #55606a; font-size: 13px; }
+.vip-city { color: #55606a; font-size: 13px; text-align: right; }
+
+/* New card-meta container used in listing cards: two rows, 10px horizontal padding,
+   10px spacing from bottom of card, and rows align left/right as required. */
+.card-meta {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+.card-meta .meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.meta-price { padding: 4px 0; font-weight: 700; color: #111827; }
+.card-meta .vip-category, .card-meta .vip-city { font-size: 13px; color: #55606a; }
+/* title + inline price */
+.vip-title-row { display:flex; justify-content:space-between; align-items:center; padding: 0px 12px; }
+.vip-title { font-weight:400; font-size:15px; }
+/* price placed below the title */
+.vip-price-below { font-weight:700; color:#111827; }
+.filter-title, .vip-title {
+  font-size: 16px;
+  margin: 5px 0px;
+  font-weight: 700;
+  color: #222;
+}
+
+.chips {
+  display: block;
+  max-height: 270px;
+  overflow-y: auto;
+  padding-right: 4px; /* leave room for scrollbar */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+.chip {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: #f3f6f8;
+  border-radius: 0; /* no rounding */
+  border: none;
+  border-bottom: 1px solid #e6eaed; /* subtle separator, no gap */
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 0; /* no vertical gaps between chips */
+  text-align: left;
+  box-sizing: border-box;
+}
+.chip:hover { background: #e9eef2; }
+.chip.active { background: #dbe4eb; }
+
+/* Category chip icons */
+.category-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.category-chip .cat-icon {
+  flex: 0 0 12px;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* City chips: left empty rounded marker and filled inner square when active */
+.city-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.city-chip .city-marker {
+  position: relative;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cfd6db;
+  border-radius: 4px;
+  background: transparent;
+  box-sizing: border-box;
+}
+.city-chip .city-marker::after {
+  content: none;
+}
+/* Active state: fill marker with color and show centered check */
+.city-chip.active .city-marker {
+  background: #cfd6db;
+  border-color: #cfd6db;
+}
+.city-chip.active .city-marker::after {
+  content: '\2713'; /* check mark */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #1f2b33; /* check color for contrast */
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* scrollbar styling for chips lists (categories) and city filter: 4px */
+.chips, .city-filter {
+  scrollbar-width: thin; /* Firefox fallback */
+  scrollbar-color: #a0adbe #f3f6f8;
+}
+.chips::-webkit-scrollbar, .city-filter::-webkit-scrollbar { width: 4px; height: 4px; }
+.chips::-webkit-scrollbar-track, .city-filter::-webkit-scrollbar-track { background: #f3f6f8; }
+.chips::-webkit-scrollbar-thumb, .city-filter::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 6px; background: #a0adbe; }
+
+.price-current-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #55606a;
+}
+
+.filter-section {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.category-filter {
+  width: 78%;
+  transition: width 0.3s ease;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 6), 1fr);
+  gap: 1rem;
+}
+
+
+.category-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.6rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.category-box img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-top: 12px;
+  margin-bottom: 0px;
+}
+
+.category-box:hover {
+  transform: scale(1.05);
+}
+
+.extra-category-grid {
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 1rem;
+}
+
+
+.city-filter {
+  width: 22%;
+  max-width: 100%;
+  transition: width 0.3s ease;
+  background: #fff;
+  padding: 0; /* chips will align to edges */
+  border-radius: 0; /* no rounding */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+
+.city-filter h2 {
+  margin-left: 40px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.city-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  justify-content: center;
+
+}
+
+.base-city-list,
+.extra-city-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.city-btn {
+  width: 200px;
+  padding: 0.6rem;
+  margin-bottom: 0.5rem;
+  border: none;
+  background: #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease-in-out;
+}
+
+.city-btn:hover {
+  background: #ddd;
+}
+
+.selected-city-or {
+  font-size: 0.6em;
+  color: #333;
+}
+
+/* Цена */
+.price-filter-container {
+  display: block;
+  width: 100%;
+  margin: 12px 0 18px 0;
+}
+
+.price-range-slider {
+  flex: 1;
+  position: relative;
+}
+
+.price-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.price-labels-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+/* 1. Контейнер */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* 2. Самі повзунки (інпути) */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  pointer-events: auto;
+  margin: 0;
+  z-index: 10; /* Вище за лінії */
+  outline: none;
+}
+
+/* 3. Стилі точок (Thumb) */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto;
+  height: 15px;
+  width: 15px;
+  background: #a0adbe;;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff; /* Для світлої теми */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 10;
+}
+
+input[type=range]::-moz-range-thumb {
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  background: #f3f6f8;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 4. Лінії фону (Трек) */
+.slider-track {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 100%;
+  border-radius: 4px;
+  background: #ddd;
+  z-index: 2;
+}
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: flex-start;
+}
+.filter-actions button {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #808b99;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+.filter-actions button:hover { background: #6c7683; }
+
+.submit-button,
+.chat-form button,
+#profile-form button,
+#logout-btn,
+#show-my-listings-btn,
+.my-listings-btn,
+.btn-link {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #7c8794;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+#logout-btn {
+margin-top: 4px;
+}
+.chat-form button{
+margin-left: 10px;
+}
+
+.submit-button:hover,
+.chat-form button:hover,
+#profile-form button:hover,
+#logout-btn:hover,
+#show-my-listings-btn:hover,
+.my-listings-btn:hover,
+.btn-link:hover {
+  background-color: #657484;
+}
+
+
+.listing-grid {
+  position: relative;
+  gap: 16px;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.listing-card {
+  width: 304px;
+  height: 310px;
+  background-color: #fff;
+  padding: 0;
+  /* reserve space at card bottom for the meta container (two rows) */
+  padding-bottom: 56px;
+  margin-top: 16px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+
+.listing-card h3 {
+  color: #55606a;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding: 0 0px;
+}
+
+/* Clamp title to maximum 2 lines with an ellipsis at end of second line */
+.listing-card h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25em; /* ensures predictable height for 2 lines */
+  max-height: 2.5em; /* 2 * line-height */
+}
+
+
+.listing-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.listing-image.placeholder-image {
+  max-height: 200px;
+  object-fit: contain;
+  padding: 10px;
+  background-color: #f0f0f0;
+  opacity: 0.7;
+}
+
+/* Visual for inactive listings in "My listings" */
+.listing-card.inactive {
+  opacity: 0.5;
+  filter: grayscale(60%);
+}
+.listing-card.blocked {
+  position: relative;
+  cursor: pointer;
+}
+.listing-card.blocked > * {
+  filter: blur(2px);
+}
+.listing-card.blocked .blocked-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(120, 0, 0, 0.26);
+  color: #d80000;
+  font-size: 35px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 2;
+  filter: none;
+  backdrop-filter: blur(1px);
+}
+
+.listing-image-wrapper {
+  position: relative;
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh; /* немного меньше окна, чтобы не прилегать вплотную */
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  overflow: visible;
+}
+
+.modal-body {
+  overflow-y: auto;
+  padding-right: 20px;   /* больше отступ справа, чтобы полоска была чуть правее */
+  box-sizing: content-box; /* важное, чтобы padding не сокращал внутреннюю ширину */
+}
+
+/* Полоса прокрутки WebKit */
+.modal-body::-webkit-scrollbar {
+  width: 6px;            /* сделаем полосу уже */
+}
+
+/* Отступ внутри track - сдвигаем полосу вправо */
+.modal-body::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 8px;
+  margin-top: 10px;     /* сдвигаем сверху — делает полосу короче */
+  margin-bottom: 10px;  /* сдвигаем снизу */
+}
+
+/* Полоса прокрутки (ползунок) */
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+  margin-top: 10px;     /* сдвигаем полосу вверх/вниз внутри track */
+  margin-bottom: 10px;
+}
+
+
+.modal-close {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #4a5563;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.modal-close:hover {
+  color: #39424e;
+}
+
+.detail-photo {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.detail-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+.detail-description {
+  font-size: 16px;
+  line-height: 1.4;
+  color: #555;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.modal-body p,
+.modal-body span,
+.modal-body h2 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+#lightbox {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  cursor: zoom-out;
+}
+
+#lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  border-radius: 12px;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px 0;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #fff;
+}
+
+.btn-chat {
+  background-color: #4a90e2;
+  border: 1px solid #357abd;
+  color: #ffffff;
+}
+.btn-chat:hover {
+  background-color: #357abd;
+}
+.btn-order {
+  background-color: #2ecc71;
+  border: 1px solid #27ae60;
+  color: #ffffff;
+}
+.btn-order:hover {
+  background-color: #27ae60;
+}
+
+
+.modal-content p strong {
+  color: #444;
+  font-weight: 600;
+}
+
+/* Контейнер фильтра города */
+.city-filter-or {
+  width: 100%;
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 20px; /* отступ после карты */
+}
+
+/* Списки городов */
+.base-city-list-or,
+.extra-city-list-or {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Кнопки городов */
+.city-btn-or {
+  flex: 1 1 calc(20% - 10px); /* 5 кнопок в ряд */
+  min-width: 180px;
+  padding: 0.6rem;
+  border: none;
+  background: #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease-in-out;
+}
+
+.city-btn-or:hover {
+  background: #ddd;
+}
+
+/* Дополнительные города скрыты по умолчанию с анимацией */
+.extra-city-list-or {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.extra-city-list-or.show {
+  max-height: 500px; /* достаточно для нескольких рядов */
+}
+
+
+
+.orders-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 800px;
+      margin: 20px auto;
+}
+
+.order-card {
+      display: flex;
+      gap: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+}
+.order-card:hover {
+      transform: translateY(-2px);
+}
+
+.order-photo {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+}
+
+.order-info {
+      flex: 1;
+      min-width: 0;
+}
+.order-info p {
+      margin: 5px 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+}
+
+/* --- МІНІМАЛІСТИЧНІ СІРІ КНОПКИ ТА СТАТУСИ --- */
+
+.status-toggle-or,
+.cancel-btn-or,
+.chat-btn-or {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  /*user-select: none;*/
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border: 1px solid #ddd; /* Тонка рамка для структури */
+  color: #444;            /* Темно-сірий текст для читабельності */
+  background-color: #eee; /* Основний світло-сірий фон */
+  font-family: inherit;
+}
+
+/* Ефект при наведенні для всіх кнопок */
+.status-toggle-or:hover,
+.cancel-btn-or:hover,
+.chat-btn-or:hover {
+  background-color: #ddd; /* Стає трохи темнішим */
+  border-color: #ccc;
+}
+
+/* Специфічні налаштування (якщо потрібно розрізняти стани текстом) */
+.status-pending-or {
+  background-color: #eee;
+}
+
+.status-delivered-or {
+  background-color: #ddd; /* Доставлене замовлення виглядає "завершеним" */
+  color: #777;            /* Текст стає менш активним */
+}
+
+/* Контейнер кнопок */
+.status-row-or {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Прибираємо стандартні рамки для кнопок-елементів */
+button.cancel-btn-or,
+button.chat-btn-or {
+  outline: none;
+}
+
+.subtitle {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+form label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* --- ЗАГАЛЬНІ СТИЛІ ФОРМ --- */
+form input,
+form select,
+form textarea,
+.chat-form input,
+#profile-form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  margin-top: 4px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  transition: border-color 0.3s;
+}
+
+/* --- ВИПРАВЛЕННЯ ДЛЯ ЧАТУ  --- */
+.chat-form input {
+  margin: 0 !important;
+  height: 45px;
+  padding: 0 20px;
+  font-size: 15px;
+  border-radius: 25px;
+  background: #fff;
+  border: 1px solid #dfe1e5 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  flex: 1;
+}
+
+.chat-form input:focus {
+  border-color: #666 !important; /
+}
+
+/* --- ОСНОВНИЙ КОНТЕЙНЕР --- */
+.chat-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  height: 85vh;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* --- БОКОВА ПАНЕЛЬ --- */
+.chat-sidebar {
+  width: 350px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.chat-sidebar .chat-buttons {
+  display: flex;
+  padding: 15px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  gap: 8px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #666;
+  background: #fff;
+  color: #666;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.mode-btn.active {
+  background: #666;
+  color: #fff;
+}
+
+/* --- ГОЛОВНА ОБЛАСТЬ ЧАТУ  --- */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  background-color: #ffffff;
+  background-image: url("https://www.transparenttextures.com/patterns/xv.png");
+  background-repeat: repeat;
+}
+
+/* ХЕДЕР ЧАТУ  */
+.chat-header {
+  margin: 15px 20px 5px 20px;
+  padding: 10px 25px;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 1px solid #eee;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  z-index: 5;
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 17px;
+  color: #222;
+}
+
+.chat-header p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* ВІКНО ПОВІДОМЛЕНЬ */
+.chat-window {
+  flex: 1;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  background: transparent;
+}
+
+/* ХМАРИНКИ ПОВІДОМЛЕНЬ */
+.chat-message {
+  max-width: 70%;
+  padding: 10px 16px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+}
+
+.chat-message.buyer {
+  align-self: flex-end;
+  background-color: #effdde;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-message.seller {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border-bottom-left-radius: 4px;
+}
+
+/* ФОРМА ВВОДУ */
+.chat-form {
+  padding: 10px 20px 20px 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 5;
+  background: transparent;
+  align-items: center;
+}
+
+.chat-form button {
+  height: 45px;
+  margin: 0 !important;
+  min-width: 90px;
+  padding: 0 20px;
+  background-color: #666;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.chat-form button:hover {
+  background-color: #777;
+}
+
+/* СПИСОК ЧАТІВ */
+.chats-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chat-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.chat-item.active {
+  background: #DCDCDC;
+  border-left: 4px solid #666;
+}
+
+.chat-item-listing {
+  font-size: 13px;
+  color: #666;
+  font-weight: 600;
+}
+
+/* Скроллбар */
+.chat-window::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-window::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.sidebar-placeholder {
+  text-align: center;
+  color: #999;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.profile-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+#unauthenticated-block {
+  border: 1px solid #ccc;
+  padding: 30px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 12px;
+}
+
+#unauthenticated-block h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#unauthenticated-block p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #555;
+}
+
+.unauth-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.my-listings-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  overflow-y: auto;
+  padding: 30px;
+  display: none;
+  z-index: 1000;
+}
+
+/* Promote modal */
+.promote-modal { 
+  position: fixed;
+  inset: 0;
+  padding: 30px;
+  background: rgba(0,0,0,0.4);
+  display: none; /* hidden by default */
+  place-items: center;
+  z-index: 1200;
+}
+.promote-btn {
+    margin-top: 10px;
+    padding: 8px 14px;
+    background-color: #5a6674;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.promote-header{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+.promote-header h2{
+    margin:0;
+}
+
+/* Centered modal content */
+.promote-content {
+  background: #fff;
+  padding: 20px;
+  width: 520px;
+  max-width: calc(100% - 40px);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.promote-content h2 { margin-top: 0; }
+.promote-options {
+  width: 100%;
+  max-width: 440px;
+  margin-top: 8px;
+  text-align: left;
+}
+.promote-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background .12s ease, box-shadow .12s ease;
+}
+.promote-options label:hover { background: rgba(0,0,0,0.03); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+
+/* Radio input styling */
+.promote-options input[type="radio"] {
+  transform: scale(1.2);
+  margin: 0;
+  accent-color: #555;
+}
+
+.promote-content .card-input-block {
+  width: 100%;
+  max-width: 440px;
+  margin-top: 12px;
+}
+.promote-content .card-field input { width: 100%; box-sizing: border-box; }
+
+.promote-actions { width: 100%; max-width: 440px; text-align: center; margin-top: 14px; }
+.promote-actions .submit-button { min-width: 160px; }
+
+.my-listings-modal h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.status-message {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #333;
+  opacity: 0.5;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-page .profile-header .page-title {
+  margin-bottom: 0;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 30%) minmax(0, 70%);
+  gap: 20px;
+  align-items: start;
+}
+
+.profile-sidebar,
+.profile-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.profile-sidebar {
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-avatar-circle {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: #dbe4eb;
+  color: #465563;
+  font-size: 44px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-display-name {
+  margin: 14px 0 25px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  word-break: break-word;
+}
+
+.profile-sidebar-actions {
+  width: 100%;
+}
+
+.profile-nav-btn {
+  display: block;
+  width: 100%;
+  padding: 16px 12px;
+  background: #f3f6f8;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #e6eaed;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left;
+  box-sizing: border-box;
+  color: #333;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.profile-nav-btn#show-my-listings-btn {
+  padding: 16px 12px;
+  font-size: 16px;
+  background: #f3f6f8;
+  color: #333;
+  border-radius: 0;
+  border-bottom: 1px solid #e6eaed;
+}
+
+.profile-nav-btn:hover {
+  background: #e9eef2;
+}
+
+.profile-nav-btn#show-my-listings-btn:hover {
+  background: #e9eef2;
+}
+
+.profile-content {
+  padding: 22px 22px 12px 22px;
+}
+
+.profile-exit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0;
+}
+
+.profile-exit-btn img {
+  width: 13px;
+  height: 13px;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.my-listings-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+#my-listing-grid {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+#my-listing-grid .listing-card {
+  width: 304px;
+  height: 390px !important;
+}
+
+/* On profile 'My listings' only: shift price slightly from the left edge */
+#my-listing-grid .vip-price-below {
+  padding: 0px 0px 0px 10px;
+}
+
+/* Hide only the description paragraph inside listing cards in the My Listings modal */
+#my-listing-grid .listing-card > p:nth-of-type(1) {
+  display: none;
+}
+
+/* (removed conflicting rule that forced auto height for profile cards) */
+
+.edit-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #5a6674;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.edit-btn:hover {
+  background-color: #4a5563;
+  transform: scale(1.02);
+}
+
+.delete-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #5a6674;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.delete-btn:hover {
+  background-color: #4a5563;
+  transform: scale(1.02);
+}
+
+/* Status button uses same look as edit/delete */
+.status-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #5a6674;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.status-btn:hover {
+  background-color: #4a5563;
+  transform: scale(1.02);
+}
+
+.close-btn {
+  background: transparent;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+  float: right;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+input[type="file"] {
+  padding: 8px;
+  background: #f0f0f0;
+  border-radius: 6px;
+}
+
+
+/* Кнопка избранного в блоке объявления */
+.favorite-icon {
+  position: relative;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 2px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.favorite-icon:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.star-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.favorite-icon:not(.active) .star-icon {
+  color: #999;
+}
+
+.favorite-icon.active .star-icon {
+  color: #e74c3c !important;
+}
+
+/* Блок карточных данных */
+.card-input-block {
+  background: linear-gradient(145deg, #f9f9f9, #eaeaea);
+  width: 600px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.card-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.card-field-inline {
+  display: flex;
+  gap: 10px;
+}
+.card-field label {
+  font-size: 0.85em;
+  margin-bottom: 4px;
+  color: #333;
+}
+.card-field input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+.card-field textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  resize: vertical;
+  min-height: 96px;
+}
+
+
+/* Кнопка перемикання теми у стилі "Обране" */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    transition: all 0.3s ease;
+    outline: none;
+    color: #f1c40f;
+}
+
+/* Ефект при наведенні */
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: none;
+}
+
+/* Адаптація кнопки під ТЕМНУ тему */
+body.dark-mode .theme-toggle {
+    background: transparent;
+    box-shadow: none;
+    color: #f39c12;
+}
+
+/* Стиль самих SVG всередині кола */
+.theme-toggle svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+/* Клас для приховування */
+.theme-toggle svg.hidden {
+    display: none;
+}
+
+/* Кнопки теми та мови (права частина) */
+.nav-controls {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end; 
+    gap: 20px; 
+}
+
+/* Базовий стиль для обох круглих кнопок */
+.lang-toggle, .theme-toggle {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    width: auto;
+    height: auto;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.lang-toggle {
+    color: #ffffff;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+}
+
+/* Ефекти наведення */
+.lang-toggle:hover, .theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: none;
+}
+
+.lang-toggle:hover {
+    transform: none;
+    background: transparent;
+}
+
+/* Темна тема для обох кнопок */
+body.dark-mode .lang-toggle,
+body.dark-mode .theme-toggle {
+    background: transparent;
+    box-shadow: none;
+}
+
+.lang-text {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+body.dark-mode .lang-toggle {
+    background: transparent;
+    color: #fff;
+}
+
+.lang-option {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: #3e444a;
+}
+
+.lang-option.active {
+  color: #7f868e;
+}
+
+.lang-separator {
+  color: #d1d6de;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Стиль SVG */
+.lang-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Ховаємо верхню панель Google Translate */
+body {
+    top: 0 !important;
+}
+.goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon {
+    display: none !important;
+}
+.goog-te-gadget-simple {
+    background-color: transparent !important;
+    border: none !important;
+}
+.goog-tooltip, .goog-tooltip:hover {
+    display: none !important;
+}
+.goog-text-highlight {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* Щоб не було відступу зверху */
+.skiptranslate {
+    display: none !important;
+}
+
+
+/* Прибираємо стилі з тегів <font>, які вставляє Google */
+font[dir="auto"] {
+    vertical-align: inherit !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    color: inherit !important;
+    background: transparent !important;
+}
+
+/* Вимикаємо підсвічування при наведенні на ці класи */
+.VIpgJd-yAWNEb-VIpgJd-fmcmS-sn54Q,
+.VIpgJd-yAWNEb-VIpgJd-fmcmS-sn54Q * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    appearance: none !important;
+    outline: none !important;
+    cursor: inherit !important;
+}
+
+/* Забороняємо будь-яку зміну фону для всього, що позначено як 'skiptranslate' або класи Google */
+[class*="VIpgJd"] {
+    background-color: transparent !important;
+    transition: none !important;
+}
+
+
+
+/* DARK MODE */
+/* SOFT DARK MODE */
+body.dark-mode .vip-block,
+body.dark-mode .filter-block,
+body.dark-mode .my-listings-modal,
+body.dark-mode {
+  background-color: #2b2b2b; /* мягкий тёмный фон */
+  color: #e0e0e0;            /* светлый текст, но не белый */
+}
+
+body.dark-mode #listing-price,
+body.dark-mode .uah,
+body.dark-mode .lang-option,
+body.dark-mode .price-label,
+body.dark-mode .card-field label,
+body.dark-mode .nav-item,
+body.dark-mode .vip-price-below,
+body.dark-mode .selected-city-or,
+body.dark-mode h2,
+body.dark-mode .page-title,
+body.dark-mode .city-filter h2,
+body.dark-mode .listing-card p,
+body.dark-mode .modal-content,
+body.dark-mode .detail-title,
+body.dark-mode .detail-description,
+body.dark-mode .subtitle,
+body.dark-mode form label,
+body.dark-mode .status-message {
+  color: #e0e0e0;
+}
+
+body.dark-mode .listing-meta-left,
+body.dark-mode .listing-meta-right,
+body.dark-mode .listing-page-title,
+body.dark-mode .chip,
+body.dark-mode .filter-title,
+body.dark-mode .listing-card h3,
+body.dark-mode .vip-title {
+  color: #b0b0b0;
+}
+body.dark-mode .vip-dots-track {
+  background: #454c55;
+}
+body.dark-mode .vip-dot {
+  background: #9ca3af;
+}
+body.dark-mode .vip-dot.active {
+  background: #f3f4f6;
+}
+
+body.dark-mode .navbar {
+  background-color: #333; /* мягкий темный navbar */
+  border-bottom-color: #4a4a4a;
+}
+
+body.dark-mode .lang-option.active, 
+body.dark-mode .nav-item:hover {
+  background-color: transparent;
+  color: #b0b0b0;
+}
+
+body.dark-mode .chip,
+body.dark-mode .card-input-block{
+background: #555;
+}
+
+
+body.dark-mode .promote-content,
+body.dark-mode .category-box,
+body.dark-mode .city-filter,
+body.dark-mode .city-filter-or,
+body.dark-mode .listing-card,
+body.dark-mode .order-card,
+body.dark-mode .modal-content,
+body.dark-mode .modal-content p strong,
+body.dark-mode .chat-layout,
+body.dark-mode .chat-sidebar {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-mode .mode-btn{
+  background-color: #555;
+  border: 1px solid #777;
+}
+
+body.dark-mode .chat-item.active,
+body.dark-mode .submit-button,
+body.dark-mode .city-btn:hover,
+body.dark-mode .city-btn-or:hover,
+body.dark-mode .chat-form button:hover,
+body.dark-mode .edit-btn:hover,
+body.dark-mode .delete-btn:hover,
+body.dark-mode .mode-btn.active {
+  background-color: #555; /* мягкий hover */
+}
+
+
+body.dark-mode .city-btn-or,
+body.dark-mode #scrollTopBtn,
+body.dark-mode .city-btn{
+ background: #444;
+ color: #e0e0e0;
+}
+
+body.dark-mode .chat-form button,
+body.dark-mode .price-filter-buttons button{
+  background: #444;
+}
+
+
+body.dark-mode input[type="file"]::-webkit-file-upload-button {
+  background-color: #444;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+body.dark-mode .chat-header p {
+  color: #999;
+}
+
+/* Ефект при наведенні для кнопки файлу */
+body.dark-mode input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #555;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .chat-form input,
+body.dark-mode #profile-form input {
+  background-color: #444;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+body.dark-mode .listing-photo-block,
+body.dark-mode .listing-info-block,
+body.dark-mode .listing-description-block,
+body.dark-mode  .top-page-section,
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+body.dark-mode .chat-main {
+  background-color: #2c2c2c;
+}
+
+body.dark-mode .status-toggle-or:hover,
+body.dark-mode .cancel-btn-or:hover,
+body.dark-mode .chat-btn-or:hover,
+body.dark-mode .chat-header {
+  background-color: #3a3a3a;
+  border-color: #555;
+}
+
+body.dark-mode .chat-message.buyer {
+  background-color: #3a4b3a;
+}
+body.dark-mode .chip.category-chip.chip.active,
+body.dark-mode .chat-message.seller {
+  background-color: #3c3c3c;
+}
+body.dark-mode .chips,
+body.dark-mode .chip,
+body.dark-mode .chat-sidebar .chat-buttons{
+  background: none;
+  border-bottom: none;
+  scrollbar-color: #3c3c3c #555;
+}
+
+body.dark-mode .chat-form input{
+    border: 1px solid #777 !important;
+}
+
+body.dark-mode .selected-category,
+body.dark-mode .selected-city,
+body.dark-mode #selected-category,
+body.dark-mode .chat-item-listing{
+  color: #e0e0e0;
+}
+body.dark-mode .chat-item {
+    border-bottom: 1px solid #999;
+}
+
+
+body.dark-mode .status-toggle-or,
+body.dark-mode .cancel-btn-or,
+body.dark-mode .chat-btn-or,
+body.dark-mode #show-my-listings-btn,
+body.dark-mode .my-listings-btn,
+body.dark-mode .profile-exit-btn,
+body.dark-mode #profile-form button,
+body.dark-mode #logout-btn,
+body.dark-mode .edit-btn,
+body.dark-mode .promote-btn,
+body.dark-mode .status-btn,
+body.dark-mode .delete-btn {
+    border: 1px solid #888;
+    color: #e0e0e0;
+    background-color: #444;
+}
+
+
+body.dark-mode #show-my-listings-btn:hover,
+body.dark-mode .my-listings-btn:hover,
+body.dark-mode .profile-exit-btn:hover,
+body.dark-mode #profile-form button:hover,
+body.dark-mode #logout-btn:hover,
+body.dark-mode .edit-btn:hover,
+body.dark-mode .delete-btn:hover {
+    background-color: #555;
+}
+
+body.dark-mode .profile-sidebar,
+body.dark-mode .profile-content {
+  background-color: #333;
+  border: 1px solid #444;
+}
+
+body.dark-mode .profile-avatar-circle {
+  background: #555;
+  color: #e0e0e0;
+}
+
+body.dark-mode .profile-display-name {
+  color: #e0e0e0;
+}
+
+body.dark-mode .profile-nav-btn {
+  background: #444;
+  color: #e0e0e0;
+  border-bottom: 1px solid #666;
+}
+
+body.dark-mode .profile-nav-btn#show-my-listings-btn {
+  background: #444;
+  color: #e0e0e0;
+  border-bottom: 1px solid #666;
+}
+
+body.dark-mode .profile-nav-btn:hover {
+  background: #555;
+}
+
+body.dark-mode .profile-nav-btn#show-my-listings-btn:hover {
+  background: #555;
+}
+
+body.dark-mode .chat-main {
+  background-color: #000000;
+  background-image: url("https://www.transparenttextures.com/patterns/xv.png");
+}
+
+body.dark-mode .btn-chat {
+  background-color: #2c5a8f;
+  border: 1px solid #3a78c2;
+}
+body.dark-mode .btn-chat:hover {
+  background-color: #1f4066;
+}
+body.dark-mode .btn-order {
+  background-color: #1e6b30;
+  border: 1px solid #28a745;
+}
+body.dark-mode .btn-order:hover {
+  background-color: #144d22;
+}
+
+
+body.dark-mode input[type=range]::-webkit-slider-thumb {
+  background: #555;
+  border: 2px solid #333;
+}
+
+body.dark-mode input[type=range]::-moz-range-thumb {
+  background: #bbb;
+  border: 2px solid #333;
+}
+
+body.dark-mode #slider-track {
+  background-color: #666;
+}
+
+
+
+
+/*--- Адмін панель ---*/
+.admin-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  margin-bottom:16px;
+}
+@media(min-width:760px){.admin-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.admin-grid{grid-template-columns:repeat(4,1fr)}}
+
+.stat-card{
+  background:#fff;
+  border:1px solid #f0f0f0;
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform 0.22s ease,box-shadow 0.22s ease;
+}
+.stat-card:hover{transform:translateY(-6px)}
+.stat-card-left{display:flex;gap:12px;align-items:center}
+.stat-icon{width:48px;height:48px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:20px}
+.stat-title{font-size:13px;color:var(--muted)}
+.stat-value{font-size:20px;font-weight:700;color:var(--text)}
+.stat-sub{font-size:13px;color:var(--muted);margin-top:8px}
+
+.charts-section{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:900px){.charts-section{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1300px){.charts-section{grid-template-columns:repeat(3,1fr)}}
+
+.chart-card{background:#fff;border:1px solid #f0f0f0;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.chart-header{font-weight:600;color:var(--muted);font-size:14px}
+
+/* Фіксована висота для canvas, щоб Chart.js не розширював контейнер вниз */
+.chart-card{min-height:260px}
+.chart-card canvas{width:100%;height:220px;display:block}
+
+.period-group{display:flex;gap:6px;flex-wrap:wrap}
+.period-btn{padding:8px 10px;border-radius:8px;border:1px solid #888;background:transparent;color:var(--muted);cursor:pointer;transition:background var(--transition),transform var(--transition)}
+.period-btn.active{background:var(--accent);opacity: 0.5}
+
+/* animation placeholder for chart loading */
+.chart-loading{height:220px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+
+/* Стилізація полів вибору дати (input type="date") */
+input[type="date"] {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #888;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+
+input[type="date"]:focus {
+  border-color: #5a6674; /* Колір як у ваших активних кнопок */
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Налаштування іконки календаря для Chrome/Edge */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: grayscale(1); /* Робимо іконку нейтральною */
+  opacity: 0.6;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Адаптація для темної теми */
+body.dark-mode input[type="date"] {
+  border-color: #555;
+  background-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8); /* Робимо іконку світлою в темній темі */
+}
+
+/* Контейнер для кастомного діапазону (оновлення стилів) */
+#custom-range {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Orders table styles */
+.orders-section{display:block}
+.orders-table-wrap{display:flex;justify-content:center}
+.orders-table{width:95%;max-width:1100px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:10px;overflow:hidden}
+.orders-table thead{background:var(--surface)}
+.orders-table th,.orders-table td{padding:10px 12px;border-bottom:1px solid #f4f4f4;text-align:center;font-size:14px}
+.orders-table tbody tr:nth-child(odd){background:#fbfbfb}
+.orders-table tfoot td{font-weight:700;background:#fafafa}
+.orders-table td:first-child, .orders-table th:first-child{ text-align:left;padding-left:16px }
+#moderation-table textarea,
+#moderation-table input[type="datetime-local"]{
+  font: inherit;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #fff;
+  color: #1f2937;
+}
+#moderation-table input[type="datetime-local"]{
+  width: 100%;
+  min-width: 180px;
+}
+
+@media(max-width:640px){
+  .orders-table{width:100%}
+  .orders-table th,.orders-table td{padding:8px}
+}
+
+/* DARK MODE FOR ADMIN DASHBOARD */
+
+/* Картки статистики та графіків */
+body.dark-mode .stat-card,
+body.dark-mode .chart-card {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .stat-icon {
+  background-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .stat-title,
+body.dark-mode .stat-sub,
+body.dark-mode .chart-header,
+body.dark-mode .chart-loading {
+  color: #b0b0b0; /* приглушений текст */
+}
+
+body.dark-mode .stat-value {
+  color: #ffffff;
+}
+
+/* Кнопки перемикання періодів */
+body.dark-mode .period-btn {
+  border-color: #555;
+  color: #b0b0b0;
+}
+
+
+body.dark-mode .period-btn:hover {
+  background-color: #444;
+}
+
+body.dark-mode .period-btn.active {
+  background-color: #555;
+  color: #ffffff;
+  border-color: #777;
+}
+
+/* Таблиця замовлень */
+body.dark-mode #unauthenticated-block,
+body.dark-mode .orders-table {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .orders-table thead {
+  background-color: #3d3d3d;
+}
+
+body.dark-mode .orders-table th,
+body.dark-mode .orders-table td {
+  border-bottom-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .orders-table tbody tr:nth-child(odd) {
+  background-color: #383838;
+}
+
+body.dark-mode .orders-table tbody tr:hover {
+  background-color: #404040;
+}
+
+body.dark-mode .orders-table tfoot td {
+  background-color: #3d3d3d;
+  color: #ffffff;
+}
+body.dark-mode #moderation-table textarea,
+body.dark-mode #moderation-table input[type="datetime-local"]{
+  background: #444;
+  color: #e6edf3;
+  border-color: #555;
+}
+body.dark-mode .card-field textarea {
+  background: #444;
+  color: #e6edf3;
+  border-color: #555;
+}
+body.dark-mode .listing-card.blocked .blocked-overlay {
+  color: #ff5959;
+  background: rgba(120, 0, 0, 0.35);
+}
+
+/* Ensure titles for regular and VIP listings clamp to maximum 2 lines with ellipsis */
+.listing-card h3,
+.vip-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25em;
+  max-height: 2.5em; /* 2 * line-height */
+  white-space: normal;
+}
+
+/* Fixed header on main page */
+.home-page .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1300;
+  background-color: #f0f2f5;
+}
+
+.home-page .top-page-section {
+  padding-top: 70px;
+}
+
+/* Global footer */
+.site-footer {
+  background-color: #f0f2f5;
+  border-top: 1px solid #d8dde5;
+  margin-top: 40px;
+  padding: 28px 18px 18px;
+}
+
+.site-footer.footer-pinned {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 900;
+}
+
+body.footer-has-pinned {
+  padding-bottom: var(--footer-pin-offset, 0);
+}
+
+.site-footer-inner {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.footer-columns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.footer-column h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.footer-column p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.footer-bottom-row {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #d8dde5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-socials,
+.footer-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-social-link {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid #cfd8e3;
+  color: #374151;
+  background: #ffffff;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-social-link svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.footer-social-link:hover {
+  transform: translateY(-1px);
+  background-color: #e9edf3;
+}
+
+.footer-controls .lang-toggle,
+.footer-controls .theme-toggle {
+  margin: 0;
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+body.dark-mode .site-footer {
+  background-color: #444;
+  border-top-color: #4a4f5a;
+}
+
+body.dark-mode .footer-column h2 {
+  color: #f3f4f6;
+}
+
+body.dark-mode .footer-column p,
+body.dark-mode .footer-copy {
+  color: #d1d5db;
+}
+
+body.dark-mode .footer-social-link {
+  background: #555;
+  border-color: #595959;
+  color: #f3f4f6;
+}
+
+body.dark-mode .footer-social-link:hover {
+  background: #595959;
+}
+
+@media (max-width: 900px) {
+  .footer-columns {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+}
+

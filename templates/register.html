@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Реєстрація</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/styles.css">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .auth-page {
+      width: 100%;
+      max-width: 440px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+      box-sizing: border-box;
+    }
+
+    .auth-page h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #4a90e2;
+      outline: none;
+    }
+
+    form button {
+      padding: 12px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    form button:hover {
+      background-color: #357ab8;
+    }
+
+    #register-error {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="auth-page">
+
+<h2>Реєстрація</h2>
+
+<form id="register-form">
+  <input type="text" id="username" placeholder="Ім'я користувача" required><br>
+  <input type="email" id="email" placeholder="Email" required><br>
+  <input type="password" id="password" placeholder="Пароль" required><br>
+  <button type="submit">Зареєструватися</button>
+</form>
+
+<form id="verify-form" style="display:none; margin-top:12px;">
+  <input type="text" id="verify-code" placeholder="6-значний код" minlength="6" maxlength="6" required><br>
+  <button type="submit">Підтвердити email</button>
+  <button type="button" id="resend-code-btn" style="margin-top:10px;background-color:#6b7280;">Надіслати код повторно</button>
+</form>
+
+<p id="register-error" style="color:red;"></p>
+<p id="register-success" style="color:green;"></p>
+</div>
+
+<script>
+const registerForm = document.getElementById('register-form');
+const verifyForm = document.getElementById('verify-form');
+const errorEl = document.getElementById('register-error');
+const successEl = document.getElementById('register-success');
+const resendBtn = document.getElementById('resend-code-btn');
+let pendingEmail = '';
+
+function getFirstError(payload) {
+  if (!payload || typeof payload !== 'object') return null;
+  if (payload.detail) return payload.detail;
+  for (const key of Object.keys(payload)) {
+    const value = payload[key];
+    if (Array.isArray(value) && value.length) return value[0];
+    if (typeof value === 'string' && value) return value;
+  }
+  return null;
+}
+
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorEl.textContent = '';
+  successEl.textContent = '';
+
+  const username = document.getElementById('username').value.trim();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+
+  try {
+    const res = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password }),
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      errorEl.textContent = getFirstError(data) || 'Помилка реєстрації';
+      return;
+    }
+
+    pendingEmail = email;
+    successEl.textContent = 'Код підтвердження надіслано на email. Введіть його нижче.';
+    registerForm.style.display = 'none';
+    verifyForm.style.display = 'flex';
+  } catch (err) {
+    console.error(err);
+    errorEl.textContent = 'Сервер недоступний';
+  }
+});
+
+verifyForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorEl.textContent = '';
+  successEl.textContent = '';
+
+  const code = document.getElementById('verify-code').value.trim();
+  if (!pendingEmail) {
+    errorEl.textContent = 'Спочатку завершіть реєстрацію.';
+    return;
+  }
+
+  try {
+    const res = await fetch('http://127.0.0.1:8000/api/auth/verify-email/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: pendingEmail, code }),
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      errorEl.textContent = getFirstError(data) || 'Помилка підтвердження коду';
+      return;
+    }
+
+    successEl.textContent = 'Email підтверджено. Тепер ви можете увійти.';
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 1200);
+  } catch (err) {
+    console.error(err);
+    errorEl.textContent = 'Сервер недоступний';
+  }
+});
+
+resendBtn.addEventListener('click', async () => {
+  errorEl.textContent = '';
+  successEl.textContent = '';
+  if (!pendingEmail) {
+    errorEl.textContent = 'Немає email для повторного надсилання.';
+    return;
+  }
+
+  try {
+    const res = await fetch('http://127.0.0.1:8000/api/auth/resend-code/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: pendingEmail }),
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      errorEl.textContent = getFirstError(data) || 'Не вдалося надіслати код повторно';
+      return;
+    }
+    successEl.textContent = data.detail || 'Новий код надіслано на email.';
+  } catch (err) {
+    console.error(err);
+    errorEl.textContent = 'Сервер недоступний';
+  }
+});
+</script>
+  <script src="../static/consent-analytics.js"></script>
+
+</body>
+</html>
+
+
