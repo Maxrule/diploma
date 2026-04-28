@@ -64,10 +64,34 @@
 
       <section class="listing-info-block">
         <h1 id="listing-title" class="listing-page-title"></h1>
-        <p><span id="listing-price" class="listing-price"></span> <span class="uah">грн</span></p>
-        <div class="meta-line">
-          <span id="listing-category" class="listing-meta-left"></span>
-          <span id="listing-location" class="listing-meta-right"></span>
+        <p class="listing-price-line"><span id="listing-price" class="listing-price"></span> <span class="uah">грн</span></p>
+        <div class="listing-meta-stack">
+          <div class="meta-line meta-line-primary">
+            <span class="listing-meta-pill listing-meta-left">
+              <span class="listing-meta-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h5.38a2.5 2.5 0 0 1 1.77.73l4.62 4.62A2.5 2.5 0 0 1 19 12.12v5.38A2.5 2.5 0 0 1 16.5 20h-10A2.5 2.5 0 0 1 4 17.5v-10Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="10" r="1.4" fill="currentColor"/></svg>
+              </span>
+              <span id="listing-category" class="listing-meta-text"></span>
+            </span>
+            <span class="listing-meta-pill listing-meta-right">
+              <span class="listing-meta-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.1" fill="currentColor"/></svg>
+              </span>
+              <span id="listing-location" class="listing-meta-text"></span>
+            </span>
+          </div>
+          <div class="meta-line meta-line-secondary">
+            <span class="listing-rating" aria-label="Рейтинг 5 зірок">
+              <span class="listing-stars" id="listing-stars">★★★★★</span>
+              <span class="listing-rating-value">5.0</span>
+            </span>
+            <span class="listing-comments-meta">
+              <span class="listing-meta-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M6 17.5 3.5 20V6.5A2.5 2.5 0 0 1 6 4h12A2.5 2.5 0 0 1 20.5 6.5v8A2.5 2.5 0 0 1 18 17H6.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 9.5h8M8 13h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              </span>
+              <span id="listing-comments-count">0 коментарів</span>
+            </span>
+          </div>
         </div>
         <div class="listing-info-actions">
           <button id="chat-btn" class="btn btn-chat">Чат</button>
@@ -81,6 +105,26 @@
       <h3 id="listing-full-title" class="listing-full-title"></h3>
       <h3 class="details-subtitle">Деталі</h3>
       <p id="listing-description"></p>
+      <div class="listing-comments-block">
+        <div class="listing-comments-head">
+          <h3 class="details-subtitle comments-subtitle">Коментарі</h3>
+          <div class="listing-rating-picker" id="listing-rating-picker" aria-label="Оцініть товар">
+            <button type="button" class="rating-star-btn" data-rating="1" aria-label="1 зірка">★</button>
+            <button type="button" class="rating-star-btn" data-rating="2" aria-label="2 зірки">★</button>
+            <button type="button" class="rating-star-btn" data-rating="3" aria-label="3 зірки">★</button>
+            <button type="button" class="rating-star-btn" data-rating="4" aria-label="4 зірки">★</button>
+            <button type="button" class="rating-star-btn" data-rating="5" aria-label="5 зірок">★</button>
+          </div>
+          <span id="listing-comments-badge" class="listing-comments-badge">0</span>
+        </div>
+        <label class="listing-comment-form" for="listing-comment-input">
+          <textarea id="listing-comment-input" class="listing-comment-input" placeholder="Напишіть короткий відгук або уточнення"></textarea>
+        </label>
+        <div class="listing-comment-actions">
+          <button type="button" id="listing-comment-submit" class="btn btn-comment">Додати коментар</button>
+        </div>
+        <div id="listing-comments-list" class="listing-comments-list" aria-live="polite"></div>
+      </div>
     </section>
 
     <!-- listing-actions moved into listing-info-block -->
@@ -269,5 +313,3 @@
 
 </body>
 </html>
-
-

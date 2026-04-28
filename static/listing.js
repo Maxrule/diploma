@@ -7,17 +7,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   const s = (id) => document.getElementById(id);
   const ls = localStorage;
   const body = document.body;
+  const commentStorageKey = (id) => `listingComments:${id}`;
+  const ratingStorageKey = (id) => `listingRatings:${id}`;
+  const token = ls.getItem("accessToken");
+  let currentUser = null;
+  const loadCurrentUser = async () => {
+    if (!token) return null;
+    try {
+      const res = await fetch("/api/auth/me/", { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) return null;
+      const me = await res.json();
+      if (me?.username) ls.setItem("username", me.username);
+      if (me?.full_name) ls.setItem("full_name", me.full_name);
+      currentUser = me;
+      return me;
+    } catch (e) {
+      console.error("loadCurrentUser error", e);
+      return null;
+    }
+  };
+
+  await loadCurrentUser();
 
   // Admin link visibility
   (async function checkAdminLink() {
     const adminLinks = document.querySelectorAll(".admin-link");
     adminLinks.forEach(a => { a.style.display = "none"; });
-    const token = ls.getItem("accessToken");
     if (!token) return;
     try {
-      const res = await fetch("/api/auth/me/", { headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) return;
-      const me = await res.json();
+      const me = currentUser || await loadCurrentUser();
+      if (!me) return;
       if (me?.username?.toLowerCase() === "admin") {
         adminLinks.forEach(a => { a.style.display = "inline-block"; });
       }
@@ -191,6 +210,200 @@ document.addEventListener("DOMContentLoaded", async () => {
   s("listing-description").textContent = item.description || "—";
   const fullTitleEl = s('listing-full-title');
   if (fullTitleEl) fullTitleEl.textContent = item.title || "—";
+
+  const commentsListEl = s("listing-comments-list");
+  const commentsCountEl = s("listing-comments-count");
+  const commentsBadgeEl = s("listing-comments-badge");
+  const commentInputEl = s("listing-comment-input");
+  const commentSubmitEl = s("listing-comment-submit");
+  const ratingStarsTopEl = s("listing-stars");
+  const ratingValueTopEl = document.querySelector(".listing-rating-value");
+  const ratingPickerEl = s("listing-rating-picker");
+  const ratingStarBtns = ratingPickerEl ? Array.from(ratingPickerEl.querySelectorAll(".rating-star-btn")) : [];
+  const currentUserIdRaw = ls.getItem("userId");
+  const currentUserName =
+    (currentUser?.full_name && currentUser.full_name.trim()) ||
+    (currentUser?.username && currentUser.username.trim()) ||
+    ls.getItem("full_name") ||
+    ls.getItem("username") ||
+    ls.getItem("userName") ||
+    "";
+  const currentRaterKey = String(
+    currentUserIdRaw ||
+    (currentUser?.id != null ? currentUser.id : "") ||
+    (currentUser?.username ? `user:${currentUser.username}` : "") ||
+    "guest"
+  );
+
+  const getStoredComments = () => {
+    try {
+      const parsed = JSON.parse(ls.getItem(commentStorageKey(item.id)) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  const getStoredRatings = () => {
+    try {
+      const parsed = JSON.parse(ls.getItem(ratingStorageKey(item.id)) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  const saveStoredRatings = (ratings) => {
+    ls.setItem(ratingStorageKey(item.id), JSON.stringify(ratings));
+  };
+
+  const getAverageRating = (ratings) => {
+    if (!ratings.length) return 5;
+    const total = ratings.reduce((sum, entry) => sum + Number(entry.value || 0), 0);
+    return total / ratings.length;
+  };
+
+  const renderTopRating = () => {
+    const ratings = getStoredRatings();
+    const average = getAverageRating(ratings);
+    if (ratingValueTopEl) ratingValueTopEl.textContent = average.toFixed(1);
+    if (ratingStarsTopEl) {
+      const filled = Math.round(average);
+      ratingStarsTopEl.textContent = "★★★★★";
+      ratingStarsTopEl.setAttribute("data-filled", String(filled));
+      ratingStarsTopEl.style.background = `linear-gradient(90deg, #7d8489 ${(average / 5) * 100}%, #b8c2cc ${(average / 5) * 100}%)`;
+      ratingStarsTopEl.style.webkitBackgroundClip = "text";
+      ratingStarsTopEl.style.backgroundClip = "text";
+      ratingStarsTopEl.style.webkitTextFillColor = "transparent";
+    }
+  };
+
+  const paintPickerStars = (value, mode = "active") => {
+    ratingStarBtns.forEach((btn) => {
+      const starValue = Number(btn.dataset.rating);
+      btn.classList.toggle("is-active", mode === "active" && starValue <= value);
+      btn.classList.toggle("is-preview", mode === "preview" && starValue <= value);
+    });
+  };
+
+  const getCurrentUserRating = () => {
+    const ratings = getStoredRatings();
+    return ratings.find((entry) => String(entry.userKey) === currentRaterKey)?.value || 0;
+  };
+
+  const formatCommentDate = (isoString) => {
+    try {
+      return new Date(isoString).toLocaleDateString("uk-UA", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    } catch (e) {
+      return "";
+    }
+  };
+
+  const updateCommentsMeta = (comments) => {
+    const count = comments.length;
+    const commentsLabel =
+      count === 1 ? "1 коментар" :
+      count >= 2 && count <= 4 ? `${count} коментарі` :
+      `${count} коментарів`;
+    if (commentsCountEl) commentsCountEl.textContent = commentsLabel;
+    if (commentsBadgeEl) commentsBadgeEl.textContent = String(count);
+  };
+
+  const renderComments = () => {
+    if (!commentsListEl) return;
+    const comments = getStoredComments();
+    updateCommentsMeta(comments);
+    commentsListEl.innerHTML = "";
+
+    if (!comments.length) {
+      const emptyCard = document.createElement("div");
+      emptyCard.className = "listing-comment-card empty";
+      emptyCard.textContent = "Поки що немає коментарів. Будьте першим.";
+      commentsListEl.appendChild(emptyCard);
+      return;
+    }
+
+    comments.forEach((comment) => {
+      const card = document.createElement("article");
+      card.className = "listing-comment-card";
+      card.innerHTML = `
+        <div class="listing-comment-card-head">
+          <span class="listing-comment-author">${comment.author}</span>
+          <span class="listing-comment-date">${formatCommentDate(comment.createdAt)}</span>
+        </div>
+        <div class="listing-comment-text"></div>
+      `;
+      card.querySelector(".listing-comment-text").textContent = comment.text;
+      commentsListEl.appendChild(card);
+    });
+  };
+
+  renderComments();
+  renderTopRating();
+
+  if (ratingStarBtns.length) {
+    paintPickerStars(getCurrentUserRating(), "active");
+
+    ratingStarBtns.forEach((btn) => {
+      btn.addEventListener("mouseenter", () => {
+        paintPickerStars(Number(btn.dataset.rating), "preview");
+      });
+
+      btn.addEventListener("click", () => {
+        const value = Number(btn.dataset.rating);
+        const ratings = getStoredRatings();
+        const existingIndex = ratings.findIndex((entry) => String(entry.userKey) === currentRaterKey);
+        const payload = {
+          userKey: currentRaterKey,
+          value,
+          updatedAt: new Date().toISOString()
+        };
+        if (existingIndex >= 0) {
+          ratings[existingIndex] = payload;
+        } else {
+          ratings.push(payload);
+        }
+        saveStoredRatings(ratings);
+        paintPickerStars(value, "active");
+        renderTopRating();
+      });
+    });
+
+    ratingPickerEl.addEventListener("mouseleave", () => {
+      paintPickerStars(getCurrentUserRating(), "active");
+    });
+  }
+
+  if (commentSubmitEl && commentInputEl) {
+    commentSubmitEl.onclick = () => {
+      const text = commentInputEl.value.trim();
+      if (!text) {
+        commentInputEl.focus();
+        return;
+      }
+
+      const username =
+        (currentUser?.full_name && currentUser.full_name.trim()) ||
+        (currentUser?.username && currentUser.username.trim()) ||
+        ls.getItem("full_name") ||
+        ls.getItem("username") ||
+        ls.getItem("userName") ||
+        "Гість";
+      const comments = getStoredComments();
+      comments.unshift({
+        author: username,
+        text,
+        createdAt: new Date().toISOString()
+      });
+      ls.setItem(commentStorageKey(item.id), JSON.stringify(comments.slice(0, 30)));
+      commentInputEl.value = "";
+      renderComments();
+    };
+  }
 
   const currentUserId = Number(ls.getItem("userId"));
   const sellerId = Number(item.user_id);
