@@ -48,7 +48,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'unsafe-dev-secret-key-change-me')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_bool('DEBUG', False)
 
-ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost,testserver')
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost,testserver,diploma-b8jz.onrender.com')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
