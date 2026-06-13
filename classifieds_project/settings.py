@@ -96,6 +96,7 @@ MIDDLEWARE = [
     'classifieds_project.middleware.VisitMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'classifieds_project.urls'
@@ -117,7 +118,6 @@ TEMPLATES = [
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -125,13 +125,25 @@ STATICFILES_DIRS = [
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, "templates")]
 ASGI_APPLICATION = 'classifieds_project.asgi.application'
 
+# Модифікований блок збереження даних
 if CLOUDINARY_ENABLED:
     STORAGES = {
         'default': {
             'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
         },
         'staticfiles': {
-            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+            # WhiteNoise з оптимізацією (стиснення + кешування)
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
+else:
+    # Налаштування на випадок, якщо Cloudinary вимкнено (наприклад, локально)
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
         },
     }
 
