@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редагувати оголошення</title>
+  <link rel="stylesheet" href="../static/styles.css">
+  <link rel="icon" href="../static/favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
+      if (localStorage.getItem('google_lang') === 'en') {
+        document.cookie = 'googtrans=/uk/en; path=/';
+      }
+    } catch (e) {}
+  })();
+</script>
+
+  <!-- Панель навигации -->
+    <nav class="navbar navbar-secondary">
+    <a href="index.html" class="navbar-logo">
+     <img src="../media/listing_photos/logo.png" alt="Купи / Продай">
+    </a>
+    <div class="navbar-container">
+      <a href="admin.html" class="nav-item admin-link" style="display:none">Admin</a>
+      <a href="index.html" class="nav-item">Головна</a>
+      <a href="favorites.html" class="nav-item nav-item-right-start">Обране</a>
+      <a href="chat.html" class="nav-item">Чат</a>
+      <a href="profile.html" class="nav-item">Профіль</a>
+    </div>
+
+    <div class="nav-controls">
+      <button id="lang-toggle" class="lang-toggle" title="Змінити мову">
+        <span id="lang-uk" class="lang-option active">Укр</span>
+        <span class="lang-separator">|</span>
+        <span id="lang-en" class="lang-option">Eng</span>
+      </button>
+
+      <button id="theme-toggle" class="theme-toggle" title="Змінити тему">
+        <svg id="moon-icon" class="theme-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg id="sun-icon" class="theme-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="main-container">
+    <h1 class="page-title">Редагуйте оголошення</h1>
+    <p class="subtitle">Змініть деталі вашого оголошення</p>
+
+    <form id="edit-form" enctype="multipart/form-data">
+
+      <!-- Фото -->
+      <label>Поточні фото:</label>
+      <div id="existing-photo-container" class="create-photo-preview-grid" style="margin-bottom: 10px;"></div>
+
+      <label for="photos">Додати нові фото:</label>
+      <input type="file" id="photos" name="photos" accept="image/*" multiple>
+      <div id="preview-container" class="create-photo-preview-grid" style="margin-top: 10px;"></div>
+      <button type="button" id="delete-photo-btn" style="display: none; margin-top: 10px;">Очистити нові / видалити поточні</button>
+
+      <!-- Заголовок -->
+      <label for="title">Заголовок:</label>
+      <input type="text" id="title" name="title" required><br><br>
+
+      <!-- Категория -->
+      <label for="category">Категорія:</label>
+      <select id="category" name="category" required></select><br><br>
+
+      <!-- Цена -->
+      <label for="price">Ціна:</label>
+      <input type="number" id="price" name="price" required><br><br>
+
+      <!-- Описание -->
+      <label for="description">Опис:</label>
+      <textarea id="description" name="description" rows="5" required></textarea><br><br>
+
+      <!-- Локация -->
+      <label for="location">Місцезнаходження:</label>
+      <select id="location" name="location" required></select><br><br>
+
+      <!-- Имя -->
+      <label for="name">Ваше ім'я:</label>
+      <input type="text" id="name" name="name" required><br><br>
+
+      <!-- Почта -->
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required><br><br>
+
+      <!-- Телефон -->
+      <label for="phone">Телефон:</label>
+      <input type="text" id="phone" name="phone" required><br><br>
+
+      <button type="submit" class="submit-button">Зберегти зміни</button>
+    </form>
+  </main>
+  <div id="google_translate_element" style="display:none;"></div>
+  <script src="../static/edit-listing.js"></script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="../static/consent-analytics.js"></script>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-columns">
+      <div class="footer-column">
+        <h2>Контакти</h2>
+        <p>+38(063)6632085</p>
+        <p>+38(097)3487943</p>
+        <p>maxim.kov4@gmail.com</p>
+      </div>
+      <div class="footer-column">
+        <h2>Інформація</h2>
+        <p>Умови користування</p>
+        <p>Політика конфіденційності</p>
+        <p>Про нас</p>
+      </div>
+      <div class="footer-column">
+        <h2>Покупцям</h2>
+        <p>Довідка для покупців</p>
+        <p>Підтримка</p>
+        <p>Доставка</p>
+      </div>
+      <div class="footer-column">
+        <h2>Продавцям</h2>
+        <p>Довідка для продавців</p>
+        <p>Почати продавати</p>
+        <p>Платні послуги</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom-row">
+      <div class="footer-socials" aria-label="Соціальні мережі">
+        <a class="footer-social-link" href="#" aria-label="YouTube" title="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8ZM9.6 15.6V8.4L16 12l-6.4 3.6Z"/>
+          </svg>
+        </a>
+        <a class="footer-social-link" href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.1 0 1.7.2 2.1.4a4 4 0 0 1 1.5 1A4 4 0 0 1 21.4 5c.2.4.3 1 .4 2.1.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c0 1.1-.2 1.7-.4 2.1a4 4 0 0 1-1 1.5 4 4 0 0 1-1.5 1c-.4.2-1 .3-2.1.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.1 0-1.7-.2-2.1-.4a4 4 0 0 1-1.5-1 4 4 0 0 1-1-1.5c-.2-.4-.3-1-.4-2.1A39 39 0 0 1 2.2 12c0-3.2 0-3.6.1-4.8 0-1.1.2-1.7.4-2.1a4 4 0 0 1 1-1.5 4 4 0 0 1 1.5-1c.4-.2 1-.3 2.1-.4A39 39 0 0 1 12 2.2Zm0 1.8c-3.1 0-3.4 0-4.7.1-.9 0-1.3.2-1.6.3a2.3 2.3 0 0 0-.9.6c-.3.3-.5.6-.6.9-.1.3-.3.7-.3 1.6A37 37 0 0 0 4 12c0 3.1 0 3.4.1 4.7 0 .9.2 1.3.3 1.6.1.4.3.7.6.9.3.3.6.5.9.6.3.1.7.3 1.6.3A37 37 0 0 0 12 20c3.1 0 3.4 0 4.7-.1.9 0 1.3-.2 1.6-.3.4-.1.7-.3.9-.6.3-.3.5-.6.6-.9.1-.3.3-.7.3-1.6.1-1.3.1-1.6.1-4.7 0-3.1 0-3.4-.1-4.7 0-.9-.2-1.3-.3-1.6a2.3 2.3 0 0 0-.6-.9c-.3-.3-.6-.5-.9-.6-.3-.1-.7-.3-1.6-.3A37 37 0 0 0 12 4Zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8Zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm6.2-2.1a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0Z"/>
+          </svg>
+        </a>
+        <a class="footer-social-link" href="#" aria-label="Twitter" title="Twitter">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 5.9c-.7.3-1.5.5-2.3.6a4 4 0 0 0 1.7-2.2 7.8 7.8 0 0 1-2.5 1 4 4 0 0 0-6.8 3.7 11.3 11.3 0 0 1-8.2-4.1 4 4 0 0 0 1.2 5.4c-.6 0-1.2-.2-1.7-.5 0 1.9 1.3 3.5 3.1 3.9a4.3 4.3 0 0 1-1.8.1 4 4 0 0 0 3.8 2.8A8.1 8.1 0 0 1 2 18.4a11.5 11.5 0 0 0 6.3 1.8c7.5 0 11.6-6.2 11.6-11.6V8a8 8 0 0 0 2-2.1Z"/>
+          </svg>
+        </a>
+        <a class="footer-social-link" href="#" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.3-1.2-1.7-1.2-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.8 2.7 1.3 3.3 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-5.8 0-1.3.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3.1 0 0 .9-.3 3.1 1.1a10.8 10.8 0 0 1 5.6 0c2.1-1.4 3.1-1.1 3.1-1.1.6 1.6.2 2.8.1 3.1.7.8 1.1 1.9 1.1 3.1 0 4.5-2.8 5.5-5.5 5.8.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="footer-controls">
+        <button type="button" class="lang-toggle footer-lang-toggle" title="Змінити мову">
+          <span class="lang-option active">Укр</span>
+          <span class="lang-separator">|</span>
+          <span class="lang-option">Eng</span>
+        </button>
+        <button type="button" class="theme-toggle footer-theme-toggle" title="Змінити тему">
+          <svg class="theme-icon footer-moon-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+          <svg class="theme-icon footer-sun-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42"/></svg>
+        </button>
+      </div>
+
+      <p class="footer-copy">Усі онлайн-оголошення України, 2022-2026</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var footer = document.querySelector('.site-footer');
+    var footerLangBtn = document.querySelector('.footer-lang-toggle');
+    var footerThemeBtn = document.querySelector('.footer-theme-toggle');
+    if (!footer || !footerLangBtn || !footerThemeBtn) return;
+
+    var body = document.body;
+    var doc = document.documentElement;
+    var moonIcon = footerThemeBtn.querySelector('.footer-moon-icon');
+    var sunIcon = footerThemeBtn.querySelector('.footer-sun-icon');
+    var langOptions = footerLangBtn.querySelectorAll('.lang-option');
+    var rafId = null;
+
+    function syncFooterPin() {
+      footer.classList.remove('footer-pinned');
+      body.classList.remove('footer-has-pinned');
+      body.style.removeProperty('--footer-pin-offset');
+
+      var viewportHeight = window.innerHeight || doc.clientHeight;
+      var pageHeight = Math.max(doc.scrollHeight, body.scrollHeight);
+
+      if (pageHeight <= viewportHeight + 2) {
+        body.style.setProperty('--footer-pin-offset', footer.offsetHeight + 'px');
+        body.classList.add('footer-has-pinned');
+        footer.classList.add('footer-pinned');
+      }
+    }
+
+    function requestFooterSync() {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(function () {
+        rafId = null;
+        syncFooterPin();
+      });
+    }
+
+    function syncTheme() {
+      var isDark = body.classList.contains('dark-mode');
+      moonIcon.classList.toggle('hidden', isDark);
+      sunIcon.classList.toggle('hidden', !isDark);
+    }
+
+    function syncLang() {
+      var isEn = localStorage.getItem('google_lang') === 'en';
+      if (langOptions.length < 2) return;
+      langOptions[0].classList.toggle('active', !isEn);
+      langOptions[1].classList.toggle('active', isEn);
+    }
+
+    footerThemeBtn.addEventListener('click', function () {
+      var headerThemeBtn = document.getElementById('theme-toggle');
+      if (headerThemeBtn) {
+        headerThemeBtn.click();
+      } else {
+        var isDark = body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+      syncTheme();
+      requestFooterSync();
+    });
+
+    footerLangBtn.addEventListener('click', function () {
+      var headerLangBtn = document.getElementById('lang-toggle');
+      if (headerLangBtn) {
+        headerLangBtn.click();
+      } else {
+        var isEn = localStorage.getItem('google_lang') === 'en';
+        if (isEn) {
+          localStorage.removeItem('google_lang');
+          document.cookie = 'googtrans=/uk/uk; path=/';
+        } else {
+          localStorage.setItem('google_lang', 'en');
+          document.cookie = 'googtrans=/uk/en; path=/';
+        }
+        window.location.reload();
+      }
+      syncLang();
+    });
+
+    syncTheme();
+    syncLang();
+    syncFooterPin();
+
+    var mutationObserver = new MutationObserver(requestFooterSync);
+    mutationObserver.observe(body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true
+    });
+
+    if ('ResizeObserver' in window) {
+      var resizeObserver = new ResizeObserver(requestFooterSync);
+      resizeObserver.observe(body);
+      resizeObserver.observe(doc);
+      resizeObserver.observe(footer);
+    }
+
+    window.addEventListener('resize', requestFooterSync);
+    window.addEventListener('load', requestFooterSync);
+    window.addEventListener('orientationchange', requestFooterSync);
+  })();
+</script>
+
+
+
+</body>
+</html>
+
+
+
+
+
